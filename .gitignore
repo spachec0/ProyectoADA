@@ -1,1 +1,5 @@
 /.idea/
+/output/BarabasiAlbert/*.gv
+/output/ErdosRenyi/*.gv
+/output/Geographic/*.gv
+/output/Gilbert/.gv
