@@ -7,9 +7,11 @@ import Graphs.Models.Writter;
 
 public class SimpleGeographical extends Algorithm {
 
-    public SimpleGeographical(int n, double r, boolean directed) {
+    private String algorithmType = "Geographic";
+
+    public SimpleGeographical(int n, double r, boolean directed, int index, String type) {
         super();
-        String algorithmType = "Geographic";
+
         for (int i = 0; i < n; i++) {
             Vertex vertex = new Vertex(i, algorithmType);
             vertexes.add(vertex);
@@ -17,6 +19,19 @@ public class SimpleGeographical extends Algorithm {
         System.out.println("[+] Simple Geographical");
         SimpleGeographicalAlgorithm(r);
         Graph graph = new Graph(vertexes, null, n);
+        Writter file0 = new Writter(algorithmType, graph, directed);
+    }
+
+    public SimpleGeographical(int n, double r, boolean directed) {
+        super();
+        for (int i = 0; i < n; i++) {
+            Vertex vertex = new Vertex(i, algorithmType);
+            vertexes.add(vertex);
+        }
+        System.out.println("[+] Simple Geographical");
+        SimpleGeographicalAlgorithm(r);
+        Graph graph = new Graph(vertexes, null, n);
+
         Writter file = new Writter(algorithmType, graph, directed);
     }
 

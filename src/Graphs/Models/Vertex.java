@@ -5,15 +5,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Vertex {
+
     private String id;
     private List<Edge> vertexes;
+    private int grade = 0;
+
+    private int distance;
 
     private double coordX;
     private double coordY;
-
-    private double probability = 1;
-    private int grade = 0;
     private boolean exist = false;
+    private String previousVertex;
+    private double probability = 1;
+    private boolean explored = false;
+
 
     public Vertex(int id, String tipo) {
         setId(String.valueOf(id));
@@ -91,4 +96,9 @@ public class Vertex {
     public void addEdge(Edge edge) {
         this.vertexes.add(edge);
     }
+
+    public boolean getExplored() { return !explored; }
+    public void setExplored(boolean explored) { this.explored = explored; }
+
+
 }

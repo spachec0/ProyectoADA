@@ -1,5 +1,4 @@
+/output/
+/src/META-INF/
+/out/production/
 /.idea/
-/output/BarabasiAlbert/*.gv
-/output/ErdosRenyi/*.gv
-/output/Geographic/*.gv
-/output/Gilbert/*.gv

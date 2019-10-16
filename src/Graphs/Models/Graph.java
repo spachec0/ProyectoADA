@@ -16,7 +16,11 @@ public class Graph {
         setEdges(edges);
     }
 
-    List<Vertex> getVertexes() {
+    public static Graph newInstance (Graph graph) {
+        return new Graph(graph.getVertexes(),graph.getEdges(),graph.getNum());
+    }
+
+    public List<Vertex> getVertexes() {
         return vertexes;
     }
     
@@ -50,5 +54,5 @@ public class Graph {
     private void setEdges(List<Edge> edges) {
         this.edges = edges;
     }
-    
+
 }

@@ -20,4 +20,8 @@ abstract class Algorithm {
         int initialNumber = 0;
         return initialNumber + randomGenerator.nextInt(maxNumber);
     }
+
+    public List<Vertex> getVertexes() {
+        return vertexes;
+    }
 }

@@ -9,11 +9,26 @@ import Graphs.Models.Writter;
 
 public class Gilbert extends Algorithm {
     private static double probability;
+    private String algorithmType = "Gilbert";
+
+    public Gilbert(int m, double p, boolean directed, int index, String type) {
+        super();
+        Gilbert.probability = p;
+
+        for (int i = 0; i < m; i++) {
+            Vertex vertex = new Vertex(i, algorithmType);
+            vertexes.add(vertex);
+        }
+        System.out.println("[+] Gilbert");
+        GilbertAlgorithm();
+        Graph graph = new Graph(vertexes, null, m);
+        Writter file0 = new Writter(algorithmType, graph, directed);
+
+    }
 
     public Gilbert(int m, double p, boolean directed) {
         super();
         Gilbert.probability = p;
-        String algorithmType = "Gilbert";
         for (int i = 0; i < m; i++) {
             Vertex vertex = new Vertex(i, algorithmType);
             vertexes.add(vertex);

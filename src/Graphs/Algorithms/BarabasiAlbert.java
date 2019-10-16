@@ -9,16 +9,28 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BarabasiAlbert extends Algorithm {
+
     private static String algorithmType = "BarabasiAlbert";
     private double connectionProbability = randomGenerator.nextDouble();
+
+    public BarabasiAlbert(int n, int d, boolean directed, int index, String type) {
+        super();
+        vertexes = new ArrayList<>();
+
+        BarabasiAlbertAlgorithm(n, d);
+        Graph graph =  new Graph(vertexes,null, n);
+        Writter file0 = new Writter(algorithmType, graph, directed);
+    }
 
     public BarabasiAlbert(int n, int d, boolean directed) {
         super();
         vertexes = new ArrayList<>();
         System.out.println("[+] Barabasi Albert");
         BarabasiAlbertAlgorithm(n, d);
-        Graph graph =  new Graph(vertexes, null, n);
+        Graph graph =  new Graph(vertexes,null, n);
+
         Writter file = new Writter(algorithmType, graph, directed);
+
     }
 
     private void BarabasiAlbertAlgorithm(int n, int d) {
@@ -62,20 +74,16 @@ public class BarabasiAlbert extends Algorithm {
     }
 
     private void decreaseGrade(Vertex vertexA, Vertex vertexB, int d) {
-        if (vertexA.getGrade() < d) {
-            int connections = vertexA.getGrade() + 1;
-            vertexA.setGrade(connections);
-            double newProbability = 1 - ((float) vertexA.getGrade() / d);
-            vertexA.setProbability(newProbability);
-        } else {
-            System.out.println("Out of connections");
-        }
+        decreaseVertexGradeX(vertexA, d);
+        decreaseVertexGradeX(vertexB, d);
+    }
 
-        if (vertexB.getGrade() < d) {
-            int connections = vertexB.getGrade() + 1;
-            vertexB.setGrade(connections);
-            double newProbability = 1 - ((float) vertexB.getGrade() / d);
-            vertexB.setProbability(newProbability);
+    private void decreaseVertexGradeX(Vertex vertex, int d) {
+        if (vertex.getGrade() < d) {
+            int connections = vertex.getGrade() + 1;
+            vertex.setGrade(connections);
+            double newProbability = 1 - ((float) vertex.getGrade() / d);
+            vertex.setProbability(newProbability);
         } else {
             System.out.println("Out of connections");
         }

@@ -5,11 +5,34 @@ import Graphs.Models.Graph;
 import Graphs.Models.Vertex;
 import Graphs.Models.Writter;
 
+import java.util.List;
+
 public class ErdosRenyi extends Algorithm {
+
+    private String algorithmType = "ErdosRenyi";
+    private Graph graph;
+
+    public ErdosRenyi(int n, int m, boolean directed, int index, String type) {
+        super();
+        for (int i = 0; i < n; i++) {
+            Vertex vertex = new Vertex(i, algorithmType);
+            vertexes.add(vertex);
+        }
+
+        System.out.println("[+] Erdos - Renyi");
+        ErdosRenyiAlgorithm(m);
+
+        graph = new Graph(vertexes, null, n);
+
+        Writter file0 = new Writter(algorithmType, graph, directed);
+    }
+
+    public Graph getGraph() {
+        return graph = Graph.newInstance(graph);
+    }
 
     public ErdosRenyi(int n, int m, boolean directed) {
         super();
-        String algorithmType = "ErdosRenyi";
         for (int i = 0; i < n; i++) {
             Vertex vertex = new Vertex(i, algorithmType);
             vertexes.add(vertex);
@@ -17,7 +40,7 @@ public class ErdosRenyi extends Algorithm {
 
         System.out.println("[+] Erdos-Renyi");
         ErdosRenyiAlgorithm(m);
-        Graph graph = new Graph(vertexes, null, n);
+        graph = new Graph(vertexes, null, n);
         Writter file = new Writter(algorithmType, graph, directed);
     }
 
@@ -25,33 +48,36 @@ public class ErdosRenyi extends Algorithm {
 
         for (int j = 0; j < m; j++) {
             Edge edge = new Edge();
-            int edge1 = generateNumber(vertexes.size());
-            int edge2 = generateNumber(vertexes.size());
+            int vertex1 = generateNumber(vertexes.size());
+            int vertex2 = generateNumber(vertexes.size());
 
-            if (vertexes.get(edge1).getVertexes().isEmpty()) {
-                while (edge2 == edge1) {
-                    edge2 = generateNumber(vertexes.size());
+            if (vertexes.get(vertex1).getVertexes().isEmpty()) {
+                while (vertex2 == vertex1) {
+                    vertex2 = generateNumber(vertexes.size());
                 }
-                edge.setVertexes(String.valueOf(edge1), String.valueOf(edge2));
-                vertexes.get(edge1).addEdge(edge);
+                edge.setVertexes(String.valueOf(vertex1), String.valueOf(vertex2));
+                vertexes.get(vertex1).addEdge(edge);
 
-            } else if (!vertexes.get(edge1).getVertexes().isEmpty()) {
+            } else if (!vertexes.get(vertex1).getVertexes().isEmpty()) {
                 boolean nodeExist = false;
                 while (!nodeExist) {
-                    for (int i = 0; i < vertexes.get(edge1).getVertexes().size(); i++) {
-                        if (vertexes.get(edge1).getVertex(i).getVertexB().equals(String.valueOf(edge2))) {
+                    for (int i = 0; i < vertexes.get(vertex1).getVertexes().size(); i++) {
+                        if (vertexes.get(vertex1).getVertex(i).getVertexB().equals(String.valueOf(vertex2))) {
                             nodeExist = true;
                             break;
                         }
                     }
                     if (nodeExist) {
-                        edge2 = generateNumber(vertexes.size());
+                        vertex2 = generateNumber(vertexes.size());
                     } else {
-                        edge.setVertexes(String.valueOf(edge1), String.valueOf(edge2));
-                        vertexes.get(edge1).addEdge(edge);
+                        edge.setVertexes(String.valueOf(vertex1), String.valueOf(vertex2));
+                        vertexes.get(vertex1).addEdge(edge);
                     }
                 }
             }
         }
+
+
+
     }
 }
