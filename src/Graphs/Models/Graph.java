@@ -16,10 +16,6 @@ public class Graph {
         setEdges(edges);
     }
 
-    public static Graph newInstance (Graph graph) {
-        return new Graph(graph.getVertexes(),graph.getEdges(),graph.getNum());
-    }
-
     public List<Vertex> getVertexes() {
         return vertexes;
     }
@@ -31,13 +27,17 @@ public class Graph {
             return null;
         }
     }
-    
-    private void setVertexes(List<Vertex> vertexes) {
+
+    public void setVertexes(List<Vertex> vertexes) {
         this.vertexes = vertexes;
     }
 
     public List<Edge> getEdges() {
         return edges;
+    }
+
+    public void setEdges(List<Edge> edges) {
+        this.edges = edges;
     }
     
     public Edge getEdge(int index) {
@@ -51,8 +51,6 @@ public class Graph {
     public int getNum(){
         return this.num;
     }
-    private void setEdges(List<Edge> edges) {
-        this.edges = edges;
-    }
+
 
 }

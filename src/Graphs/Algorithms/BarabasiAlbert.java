@@ -13,24 +13,30 @@ public class BarabasiAlbert extends Algorithm {
     private static String algorithmType = "BarabasiAlbert";
     private double connectionProbability = randomGenerator.nextDouble();
 
-    public BarabasiAlbert(int n, int d, boolean directed, int index, String type) {
+    public BarabasiAlbert(int n, int d, boolean directed, String type, float bound, boolean named) {
         super();
-        vertexes = new ArrayList<>();
-
+        this.bound = bound;
+        this.vertexes = new ArrayList<>();
+        System.out.println("[+] Barabasi Albert");
         BarabasiAlbertAlgorithm(n, d);
         Graph graph =  new Graph(vertexes,null, n);
-        Writter file0 = new Writter(algorithmType, graph, directed);
+        Writter file0 = new Writter(algorithmType, graph, directed, named);
+
+        if(type.equals("DIJ")) {
+            Dijkstra dij = new Dijkstra();
+            List<Vertex> caminoDijk = dij.runDijkstra(graph);
+            Graph gDijk = new Graph(caminoDijk, new ArrayList(), n);
+            Writter file1 = new Writter(algorithmType + "Dij", gDijk, directed, true);
+        }
     }
 
-    public BarabasiAlbert(int n, int d, boolean directed) {
+    public BarabasiAlbert(int n, int d, boolean directed, boolean named) {
         super();
         vertexes = new ArrayList<>();
         System.out.println("[+] Barabasi Albert");
         BarabasiAlbertAlgorithm(n, d);
         Graph graph =  new Graph(vertexes,null, n);
-
-        Writter file = new Writter(algorithmType, graph, directed);
-
+        Writter file0 = new Writter(algorithmType, graph, directed, named);
     }
 
     private void BarabasiAlbertAlgorithm(int n, int d) {
@@ -63,7 +69,7 @@ public class BarabasiAlbert extends Algorithm {
             double rand = randomGenerator.nextDouble();
             boolean connectionProb = connectionProbability > rand;
             if((connectionProb) && (valVertex.getGrade() < d) && (newVertex.getGrade() < d)) {
-                Edge edge = new Edge();
+                Edge edge = new Edge(bound);
                 edge.setVertexes(valVertex.getId(), newVertex.getId());
                 decreaseGrade(valVertex, newVertex, d);
                 valVertex.addEdge(edge);

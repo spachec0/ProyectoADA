@@ -2,7 +2,7 @@ package Graphs.Models.Handlers;
 
 import java.util.ArrayList;
 
-public class Queue extends ArrayList<Object> {
+public class Queue extends ArrayList {
 
     public void enqueue(Object object) {
         if (object != null) {

@@ -11,18 +11,26 @@ public class Writter {
     private String algorithm;
     private boolean directed;
 
-    public Writter(String algorithmType, boolean directed, List<Edge> edges, int num) {
+    public Writter(String algorithmType, Graph graph, boolean directed, boolean named) {
         this.algorithm = algorithmType;
         this.directed = directed;
-        generateFileTree((ArrayList<Edge>) edges, num);
-    }
-    public Writter(String algorithmType, Graph graph, boolean directed) {
-        this.algorithm = algorithmType;
-        this.directed = directed;
-        generateFileGraph(graph, graph.getNum());
+
+        if(named) {
+            if(algorithmType.equals("Geographic") || algorithmType.equals("Gilbert")
+                    || algorithmType.equals("ErdosRenyi") || algorithmType.equals("BarabasiAlbert")){
+                generateFileGraph(graph, graph.getNum(), true);
+            } else {
+                generateFileNamedDijkstra(graph, graph.getNum());
+            }
+        }
+
+        else {
+            generateFileGraph(graph, graph.getNum(), false);
+        }
     }
 
-    private void generateFileTree(ArrayList<Edge> edges, int num) {
+
+    private void generateFileNamedDijkstra(Graph graph, int num) {
         String header;
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.hh.mm.ss");
@@ -30,17 +38,19 @@ public class Writter {
 
         String fileName = "output" + "/" + algorithm + "/" + algorithm + "-" + num + "-" + dateFormat.format(currentDate) + ".gv";
 
-        if(directed) {
+        if (directed) {
             header = "digraph " + algorithm + "{\n";
         } else {
             header = "graph " + algorithm + "{\n";
         }
 
         String endGraph = "}";
-        String fileBody = header + generateTree(edges) + endGraph;
+
+        String fileBody;
+        fileBody = header + namedGraph(graph) + endGraph;
 
         try {
-            output = new java.util.Formatter(fileName);
+            output = new Formatter(fileName);
         } catch (FileNotFoundException fileNotFoundException) {
             System.err.println("Error, cannot open file");
             System.exit(1);
@@ -55,8 +65,7 @@ public class Writter {
         }
     }
 
-
-    private void generateFileGraph(Graph graph, int num) {
+    private void generateFileGraph(Graph graph, int num, boolean named) {
         String header;
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.hh.mm.ss");
@@ -64,17 +73,19 @@ public class Writter {
 
         String fileName = "output" + "/" + algorithm + "/" + algorithm + "-" + num + "-" + dateFormat.format(currentDate) + ".gv";
 
-        if(directed) {
+        if (directed) {
             header = "digraph " + algorithm + "{\n";
         } else {
             header = "graph " + algorithm + "{\n";
         }
 
         String endGraph = "}";
-        String fileBody = header + generateGraph(graph) + endGraph;
+
+        String fileBody;
+        fileBody = header + generateGraph(graph, named) + endGraph;
 
         try {
-            output = new java.util.Formatter(fileName);
+            output = new Formatter(fileName);
         } catch (FileNotFoundException fileNotFoundException) {
             System.err.println("Error, cannot open file");
             System.exit(1);
@@ -89,7 +100,7 @@ public class Writter {
         }
     }
 
-    private String generateGraph(Graph graph) {
+    private String generateGraph(Graph graph, boolean named) {
         StringBuilder graphBuilder = new StringBuilder();
 
         if (!graph.getVertexes().isEmpty()) {
@@ -99,16 +110,48 @@ public class Writter {
             for (int i = 0; i < graph.getVertexes().size(); i++) {
                 if (!graph.getVertexes().get(i).getVertexes().isEmpty()) {
                     for (int j = 0; j < graph.getVertexes().get(i).getVertexes().size(); j++) {
-                        if(directed) {
-                            graphBuilder.append("n").append(graph.getVertexes().get(i).getVertex(j).getVertexA())
-                                    .append("->").append("n").append(graph.getVertexes().get(i).getVertex(j).getVertexB())
-                                    .append(";").append("\n");
-                        }
-
-                        else {
-                            graphBuilder.append("n").append(graph.getVertexes().get(i).getVertex(j).getVertexA())
-                                    .append("--").append("n").append(graph.getVertexes().get(i).getVertex(j).getVertexB())
-                                    .append(";").append("\n");
+                        if(named) {
+                            if (directed) {
+                                graphBuilder.append("n")
+                                        .append(graph.getVertexes().get(i).getVertex(j).getVertexA())
+                                        .append(" -> ")
+                                        .append("n")
+                                        .append(graph.getVertexes().get(i).getVertex(j).getVertexB())
+                                        .append(" [label=")
+                                        .append(graph.getVertexes().get(i).getVertex(j).getWeight())
+                                        .append("]")
+                                        .append(";")
+                                        .append("\n");
+                            } else {
+                                graphBuilder.append("n")
+                                        .append(graph.getVertexes().get(i).getVertex(j).getVertexA())
+                                        .append(" -- ")
+                                        .append("n")
+                                        .append(graph.getVertexes().get(i).getVertex(j).getVertexB())
+                                        .append(" [label=")
+                                        .append(graph.getVertexes().get(i).getVertex(j).getWeight())
+                                        .append("]")
+                                        .append(";")
+                                        .append("\n");
+                            }
+                        } else {
+                            if (directed) {
+                                graphBuilder.append("n")
+                                        .append(graph.getVertexes().get(i).getVertex(j).getVertexA())
+                                        .append(" -> ")
+                                        .append("n")
+                                        .append(graph.getVertexes().get(i).getVertex(j).getVertexB())
+                                        .append(";")
+                                        .append("\n");
+                            } else {
+                                graphBuilder.append("n")
+                                        .append(graph.getVertexes().get(i).getVertex(j).getVertexA())
+                                        .append(" -- ")
+                                        .append("n")
+                                        .append(graph.getVertexes().get(i).getVertex(j).getVertexB())
+                                        .append(";")
+                                        .append("\n");
+                            }
                         }
                     }
                 }
@@ -120,19 +163,66 @@ public class Writter {
     }
 
 
-    private String generateTree(ArrayList<Edge> edges) {
+    private String namedGraph(Graph graph) {
         StringBuilder graphBuilder = new StringBuilder();
+        if (!graph.getVertexes().isEmpty()) {
+            for (int i = 0; i < graph.getVertexes().size(); i++) {
+                if (graph.getVertexes().get(i) != null) {
+                    String test = graphBuilder.toString();
+                    if (!test.contains("n" + graph.getVertexes().get(i).getId())) {
+                        graphBuilder.append("n")
+                                .append(graph.getVertexes().get(i).getId())
+                                .append(" [label=\"n")
+                                .append(graph.getVertexes().get(i).getId())
+                                .append(" (")
+                                .append(graph.getVertexes().get(i).getDistance())
+                                .append(")\"]")
+                                .append("\n");
+                    }
+                }
+            }
 
-        if (!edges.isEmpty()) {
-            for (Edge edgesBF : edges) {
-                graphBuilder.append("n").append(edgesBF.getVertexA())
-                        .append("->").append("n").append(edgesBF.getVertexB())
-                        .append(";").append("\n");
+            for (int i = 0; i < graph.getVertexes().size(); i++) {
+                if (graph.getVertexes().get(i) != null) {
+                    if (!graph.getVertexes().get(i).getPreviousVertex().equals("-")) {
+
+                        boolean inBounds = i < graph.getVertexes().get(i).getVertexes().size();
+                        if(!inBounds) {
+                            break;
+                        }
+
+                        if(directed) {
+                            graphBuilder.append("n")
+                                    .append(graph.getVertexes().get(i).getId())
+                                    .append(" -> ")
+                                    .append("n")
+                                    .append(graph.getVertexes().get(i).getPreviousVertex())
+                                    .append(" [label=")
+                                    .append(graph.getVertexes().get(i).getDistance())
+                                    .append("]")
+                                    .append(";")
+                                    .append("\n");
+                        } else {
+                            graphBuilder.append("n")
+                                    .append(graph.getVertexes().get(i).getId())
+                                    .append(" -- ")
+                                    .append("n")
+                                    .append(graph.getVertexes().get(i).getPreviousVertex())
+                                    .append(" [label=")
+                                    .append(graph.getVertexes().get(i).getDistance())
+                                    .append("]")
+                                    .append(";")
+                                    .append("\n");
+                        }
+
+                    }
+                }
             }
         } else {
-            graphBuilder = new StringBuilder("Empty edges");
+            graphBuilder = new StringBuilder("Empty vertexes");
         }
         return graphBuilder.toString();
     }
 
 }
+

@@ -10,21 +10,26 @@ public class Vertex {
     private List<Edge> vertexes;
     private int grade = 0;
 
-    private int distance;
+    private float distance = -1;
 
     private double coordX;
     private double coordY;
     private boolean exist = false;
-    private String previousVertex;
+    private String previousVertex = "";
     private double probability = 1;
     private boolean explored = false;
 
 
-    public Vertex(int id, String tipo) {
+    public Vertex(int id){
+        setId(String.valueOf(id));
+        vertexes = new ArrayList<>();
+    }
+
+    public Vertex(int id, String type) {
         setId(String.valueOf(id));
         vertexes = new ArrayList<>();
 
-        if (tipo.equals("Geographic")) {
+        if (type.equals("Geographic")) {
             SecureRandom random = new SecureRandom();
             coordX = random.nextDouble();
             coordY = random.nextDouble();
@@ -98,7 +103,14 @@ public class Vertex {
     }
 
     public boolean getExplored() { return !explored; }
+
     public void setExplored(boolean explored) { this.explored = explored; }
 
+    public float getDistance() { return distance; }
 
+    public void setDistance(float distance) { this.distance = distance; }
+
+    public String getPreviousVertex() { return previousVertex; }
+
+    public void setPreviousVertex(String previousVertex) { this.previousVertex = previousVertex; }
 }

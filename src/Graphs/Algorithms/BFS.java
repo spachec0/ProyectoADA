@@ -20,6 +20,7 @@ public class BFS extends Algorithm{
                 graph.getVertexes().get(i).setExplored(false);
             }
         }
+
     }
 
     private List<Edge> edgesBFS;

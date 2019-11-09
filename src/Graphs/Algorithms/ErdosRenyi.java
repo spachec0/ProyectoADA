@@ -5,14 +5,14 @@ import Graphs.Models.Graph;
 import Graphs.Models.Vertex;
 import Graphs.Models.Writter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ErdosRenyi extends Algorithm {
 
     private String algorithmType = "ErdosRenyi";
-    private Graph graph;
 
-    public ErdosRenyi(int n, int m, boolean directed, int index, String type) {
+    public ErdosRenyi(int n, int m, boolean directed, boolean named) {
         super();
         for (int i = 0; i < n; i++) {
             Vertex vertex = new Vertex(i, algorithmType);
@@ -21,18 +21,14 @@ public class ErdosRenyi extends Algorithm {
 
         System.out.println("[+] Erdos - Renyi");
         ErdosRenyiAlgorithm(m);
-
-        graph = new Graph(vertexes, null, n);
-
-        Writter file0 = new Writter(algorithmType, graph, directed);
+        Graph graph = new Graph(vertexes, null, n);
+        Writter file0 = new Writter(algorithmType, graph, directed, named);
     }
 
-    public Graph getGraph() {
-        return graph = Graph.newInstance(graph);
-    }
 
-    public ErdosRenyi(int n, int m, boolean directed) {
+    public ErdosRenyi(int n, int m, boolean directed, String type, float bound, boolean named) {
         super();
+        this.bound = bound;
         for (int i = 0; i < n; i++) {
             Vertex vertex = new Vertex(i, algorithmType);
             vertexes.add(vertex);
@@ -40,14 +36,21 @@ public class ErdosRenyi extends Algorithm {
 
         System.out.println("[+] Erdos-Renyi");
         ErdosRenyiAlgorithm(m);
-        graph = new Graph(vertexes, null, n);
-        Writter file = new Writter(algorithmType, graph, directed);
+        Graph graph = new Graph(vertexes, new ArrayList(), n);
+        Writter file0 = new Writter(algorithmType, graph, directed, named);
+
+        if(type.equals("DIJ")) {
+            Dijkstra dij = new Dijkstra();
+            List<Vertex> caminoDijk = dij.runDijkstra(graph);
+            Graph gDijk = new Graph(caminoDijk, new ArrayList(), n);
+            Writter file1 = new Writter(algorithmType + "Dij", gDijk, directed, true);
+        }
     }
 
     private void ErdosRenyiAlgorithm(int m) {
 
         for (int j = 0; j < m; j++) {
-            Edge edge = new Edge();
+            Edge edge = new Edge(bound);
             int vertex1 = generateNumber(vertexes.size());
             int vertex2 = generateNumber(vertexes.size());
 
@@ -76,8 +79,5 @@ public class ErdosRenyi extends Algorithm {
                 }
             }
         }
-
-
-
     }
 }

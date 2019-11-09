@@ -8,6 +8,7 @@ import java.util.Random;
 
 abstract class Algorithm {
 
+    float bound = (float) 0.0;
     Random randomGenerator;
     List<Vertex> vertexes;
 
