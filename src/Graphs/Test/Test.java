@@ -15,12 +15,12 @@ public class Test {
 
         Writter file0; Writter file1; Writter file2;
         List<Edge> aux0; List<Edge> aux1; List<Edge> aux2;
-
+//        Entrega 3
 //        Gilbert gilbert = new Gilbert(30, 0.9, false, "DIJ", 5, true);
 //        Graph graphx = new Graph(gilbert.getVertexes(), new ArrayList(), 30);
 
-        BarabasiAlbert barabasi = new BarabasiAlbert(30, 5, false, "DIJ", 5, true);
-        Graph graphx = new Graph(barabasi.getVertexes(), new ArrayList(), 30);
+//        BarabasiAlbert barabasi = new BarabasiAlbert(30, 5, false, "DIJ", 5, true);
+//        Graph graphx = new Graph(barabasi.getVertexes(), new ArrayList(), 30);
 
 //        ErdosRenyi erdosRenyi = new ErdosRenyi(30, 10, false,"DIJ", 100, true);
 //        Graph graphx = new Graph(erdosRenyi.getVertexes(), new ArrayList(), 30);
